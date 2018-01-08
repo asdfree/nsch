@@ -11,7 +11,7 @@ nsch_cat <-
 # 2012 only
 nsch_cat <- subset( nsch_cat , year == 2012 )
 # download the microdata to your local computer
-lodown( "nsch" , nsch_cat )
+
 
 library(survey)
 library(mitools)

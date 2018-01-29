@@ -4,7 +4,7 @@ Title: nsch
 Version: 0.1.0
 Author: Anthony Joseph Damico
 Maintainer: Anthony Joseph Damico <ajdamico@gmail.com>
-Description: A continuous integration package, tested on ajdamico/asdfree commit 7ce6ad0281dac2ae62a3edd368b18b78f25aee11 ajdamico/lodown commit c86764fb5bdb3195734ff9dfee6e0aa0476da895
+Description: A continuous integration package, tested on ajdamico/asdfree commit 7ce6ad0281dac2ae62a3edd368b18b78f25aee11 ajdamico/lodown commit ec6151ca502fb8fd1899bfbbd5f478a3e2f09377
 License: GPL-3
 Imports: survey, mitools, lodown
 Encoding: UTF-8

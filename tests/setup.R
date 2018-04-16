@@ -121,10 +121,10 @@ MIcombine( with( nsch_design ,
 MIcombine( with( nsch_design ,
 	svymean( ~ ageyr_child , deff = "replace" )
 ) )
-lodown:::MIsvyciprop( ~ indicator_5_2 , nsch_design ,
+MIsvyciprop( ~ indicator_5_2 , nsch_design ,
 	method = "likelihood" )
-lodown:::MIsvyttest( ageyr_child ~ indicator_5_2 , nsch_design )
-lodown:::MIsvychisq( ~ indicator_5_2 + povcat , nsch_design )
+MIsvyttest( ageyr_child ~ indicator_5_2 , nsch_design )
+MIsvychisq( ~ indicator_5_2 + povcat , nsch_design )
 glm_result <- 
 	MIcombine( with( nsch_design ,
 		svyglm( ageyr_child ~ indicator_5_2 + povcat )

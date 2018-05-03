@@ -79,12 +79,17 @@ MIcombine( with( nsch_design , svytotal( ~ povcat ) ) )
 MIcombine( with( nsch_design ,
 	svyby( ~ povcat , ~ state , svytotal )
 ) )
-MIcombine( with( nsch_design , svyquantile( ~ ageyr_child , 0.5 , se = TRUE ) ) )
+MIcombine( with( nsch_design ,
+	svyquantile(
+		~ ageyr_child ,
+		0.5 , se = TRUE 
+) ) )
 
 MIcombine( with( nsch_design ,
-	svyby( 
-		~ ageyr_child , ~ state , svyquantile , 0.5 ,
-		se = TRUE , keep.var = TRUE , ci = TRUE 
+	svyby(
+		~ ageyr_child , ~ state , svyquantile ,
+		0.5 , se = TRUE ,
+		keep.var = TRUE , ci = TRUE 
 ) ) )
 MIcombine( with( nsch_design ,
 	svyratio( numerator = ~ k6q63 , denominator = ~ totkids4 )

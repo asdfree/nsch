@@ -1,6 +1,6 @@
-# 
-# 
-# 
+# "age but a number"
+# lied babe from crib. "your nose grows"
+# cried gramps changing bib
 library(haven)
 
 nsch_stata_import <-
@@ -86,7 +86,7 @@ nsch_design <-
 					33L, 34L, 35L, 36L, 37L, 38L, 39L, 
 					40L, 41L, 42L, 44L, 45L, 46L, 47L, 
 					48L, 49L, 50L, 51L, 53L, 54L, 55L, 
-					56L, 72L) ,
+					56L) ,
 				labels =
 					c("Alabama", "Alaska", "Arizona", "Arkansas", "California", 
 					"Colorado", "Connecticut", "Delaware", "District of Columbia", 
@@ -97,7 +97,7 @@ nsch_design <-
 					"New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", 
 					"Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", 
 					"South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", 
-					"Washington", "West Virginia", "Wisconsin", "Wyoming", "Puerto Rico")
+					"Washington", "West Virginia", "Wisconsin", "Wyoming")
 			) ,
 
 		
@@ -107,17 +107,7 @@ nsch_design <-
 				levels = 1:3 , 
 				labels = c( 'excellent or very good' , 'good' , 'fair or poor' ) 
 			) ,
-		
-		indicator_1_3 = ifelse( k6q40 > 1 , NA , k6q40 ) ,
-
-# 		indicator_5_2 =
-# 			ifelse( k7q05r %in% 1:5 , 1 ,
-# 			ifelse( k7q05r %in% 0 , 0 , NA ) ) ,
-			
-		indicator_5_3 =
-			ifelse( k7q30 == 1 | k7q31 == 1 | k7q32 == 1 , 1 ,
-			ifelse( k7q30 == 0 | k7q31 == 0 | k7q32 == 0 , 0 , NA ) ) ,
-			
+					
 		poverty_categories = 
 			factor( 
 				1 + findInterval( fpl , c( 100 , 200 , 400 ) ) ,
@@ -125,58 +115,61 @@ nsch_design <-
 					c( "below poverty" , "100-199% fpl" , "200-399% fpl" , "400%+ fpl" )
 			) ,
 		
+		under_six_ever_breastfed =
+			as.numeric( k6q40 == 1 ) ,
+
 		sc_sex =
 			factor( ifelse( sc_sex %in% 1:2 , sc_sex , NA ) , labels = c( "male" , "female" ) )
 		
 	)
 MIcombine( with( nsch_design , svyby( ~ one , ~ one , unwtd.count ) ) )
 
-MIcombine( with( nsch_design , svyby( ~ one , ~ state , unwtd.count ) ) )
+MIcombine( with( nsch_design , svyby( ~ one , ~ state_name , unwtd.count ) ) )
 MIcombine( with( nsch_design , svytotal( ~ one ) ) )
 
 MIcombine( with( nsch_design ,
-	svyby( ~ one , ~ state , svytotal )
+	svyby( ~ one , ~ state_name , svytotal )
 ) )
-MIcombine( with( nsch_design , svymean( ~ ageyr_child ) ) )
+MIcombine( with( nsch_design , svymean( ~ sc_age_years ) ) )
 
 MIcombine( with( nsch_design ,
-	svyby( ~ ageyr_child , ~ state , svymean )
+	svyby( ~ sc_age_years , ~ state_name , svymean )
 ) )
 MIcombine( with( nsch_design , svymean( ~ poverty_categories ) ) )
 
 MIcombine( with( nsch_design ,
-	svyby( ~ poverty_categories , ~ state , svymean )
+	svyby( ~ poverty_categories , ~ state_name , svymean )
 ) )
-MIcombine( with( nsch_design , svytotal( ~ ageyr_child ) ) )
+MIcombine( with( nsch_design , svytotal( ~ sc_age_years ) ) )
 
 MIcombine( with( nsch_design ,
-	svyby( ~ ageyr_child , ~ state , svytotal )
+	svyby( ~ sc_age_years , ~ state_name , svytotal )
 ) )
 MIcombine( with( nsch_design , svytotal( ~ poverty_categories ) ) )
 
 MIcombine( with( nsch_design ,
-	svyby( ~ poverty_categories , ~ state , svytotal )
+	svyby( ~ poverty_categories , ~ state_name , svytotal )
 ) )
 MIcombine( with( nsch_design ,
 	svyquantile(
-		~ ageyr_child ,
+		~ sc_age_years ,
 		0.5 , se = TRUE 
 ) ) )
 
 MIcombine( with( nsch_design ,
 	svyby(
-		~ ageyr_child , ~ state , svyquantile ,
+		~ sc_age_years , ~ state_name , svyquantile ,
 		0.5 , se = TRUE ,
 		ci = TRUE 
 ) ) )
 MIcombine( with( nsch_design ,
-	svyratio( numerator = ~ k6q63 , denominator = ~ totkids4 )
+	svyratio( numerator = ~ liveusa_yr , denominator = ~ sc_age_years )
 ) )
 sub_nsch_design <- subset( nsch_design , agepos4 == 1 )
-MIcombine( with( sub_nsch_design , svymean( ~ ageyr_child ) ) )
+MIcombine( with( sub_nsch_design , svymean( ~ sc_age_years ) ) )
 this_result <-
 	MIcombine( with( nsch_design ,
-		svymean( ~ ageyr_child )
+		svymean( ~ sc_age_years )
 	) )
 
 coef( this_result )
@@ -186,7 +179,7 @@ cv( this_result )
 
 grouped_result <-
 	MIcombine( with( nsch_design ,
-		svyby( ~ ageyr_child , ~ state , svymean )
+		svyby( ~ sc_age_years , ~ state_name , svymean )
 	) )
 
 coef( grouped_result )
@@ -194,23 +187,23 @@ SE( grouped_result )
 confint( grouped_result )
 cv( grouped_result )
 degf( nsch_design$designs[[1]] )
-MIcombine( with( nsch_design , svyvar( ~ ageyr_child ) ) )
+MIcombine( with( nsch_design , svyvar( ~ sc_age_years ) ) )
 # SRS without replacement
 MIcombine( with( nsch_design ,
-	svymean( ~ ageyr_child , deff = TRUE )
+	svymean( ~ sc_age_years , deff = TRUE )
 ) )
 
 # SRS with replacement
 MIcombine( with( nsch_design ,
-	svymean( ~ ageyr_child , deff = "replace" )
+	svymean( ~ sc_age_years , deff = "replace" )
 ) )
-# MIsvyciprop( ~ indicator_5_2 , nsch_design ,
+# MIsvyciprop( ~ under_six_ever_breastfed , nsch_design ,
 # 	method = "likelihood" )
-# MIsvyttest( ageyr_child ~ indicator_5_2 , nsch_design )
-# MIsvychisq( ~ indicator_5_2 + poverty_categories , nsch_design )
+# MIsvyttest( sc_age_years ~ under_six_ever_breastfed , nsch_design )
+# MIsvychisq( ~ under_six_ever_breastfed + poverty_categories , nsch_design )
 glm_result <- 
 	MIcombine( with( nsch_design ,
-		svyglm( ageyr_child ~ indicator_5_2 + poverty_categories )
+		svyglm( sc_age_years ~ under_six_ever_breastfed + poverty_categories )
 	) )
 	
 summary( glm_result )

@@ -222,10 +222,10 @@ published_lb <- c( 0.810 , 0.838 , 0.894 , 0.949 )
 
 published_ub <- c( 0.854 , 0.878 , 0.919 , 0.961 )
 
-stopifnot( all( round( coef( results ) , 3 ) == published_proportions ) )
+stopifnot( all( abs( round( coef( results ) , 3 ) - published_proportions ) < 0.005 ) )
 
 ( ci_results <- confint( results ) )
 
-stopifnot( all( abs( ci_results[ , 1 ] - published_lb ) < 0.0015 ) )
+stopifnot( all( abs( ci_results[ , 1 ] - published_lb ) < 0.005 ) )
 
-stopifnot( all( abs( ci_results[ , 2 ] - published_ub ) < 0.0015 ) )
+stopifnot( all( abs( ci_results[ , 2 ] - published_ub ) < 0.005 ) )

@@ -163,7 +163,7 @@ MIcombine( with( nsch_design ,
 		ci = TRUE 
 ) ) )
 MIcombine( with( nsch_design ,
-	svyratio( numerator = ~ liveusa_yr , denominator = ~ sc_age_years , na.rm = TRUE )
+	svyratio( numerator = ~ liveusa_yr , denominator = ~ sc_age_years )
 ) )
 sub_nsch_design <- subset( nsch_design , agepos4 == 1 )
 MIcombine( with( sub_nsch_design , svymean( ~ sc_age_years ) ) )

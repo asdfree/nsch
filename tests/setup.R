@@ -26,10 +26,10 @@ nsch_stata_import <-
 	}
 
 nsch_screener_url <-
-	"https://www2.census.gov/programs-surveys/nsch/datasets/2021/nsch_2021_screener_Stata.zip"
+	"https://www2.census.gov/programs-surveys/nsch/datasets/2022/nsch_2022_screener_Stata.zip"
 
 nsch_topical_url <-
-	"https://www2.census.gov/programs-surveys/nsch/datasets/2021/nsch_2021_topical_Stata.zip" 
+	"https://www2.census.gov/programs-surveys/nsch/datasets/2022/nsch_2022_topical_Stata.zip" 
 
 nsch_screener_df <- nsch_stata_import( nsch_screener_url )
 
@@ -216,11 +216,11 @@ results <-
 		na.rm = TRUE 
 	)
 
-published_proportions <- c( 0.833 , 0.859 , 0.907 , 0.955 )
+published_proportions <- c( 0.817 , 0.862 , 0.922 , 0.947 )
 
-published_lb <- c( 0.810 , 0.838 , 0.894 , 0.949 )
+published_lb <- c( 0.797 , 0.843 , 0.914 , 0.941 )
 
-published_ub <- c( 0.854 , 0.878 , 0.919 , 0.961 )
+published_ub <- c( 0.835 , 0.879 , 0.930 , 0.952 )
 
 stopifnot( all( abs( round( coef( results ) , 3 ) - published_proportions ) < 0.005 ) )
 
